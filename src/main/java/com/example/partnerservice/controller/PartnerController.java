@@ -28,7 +28,11 @@ public class PartnerController {
     private final ModelMapper modelMapper;
     private Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
-
+    /**
+     * 파트너 조회
+     * @param partnerId
+     * @return BasicResponse
+     */
     @GetMapping("/find")
     public BasicResponse getCategoryId(@RequestParam Long partnerId){
         BasicResponse basicResponse = new BasicResponse<>();
