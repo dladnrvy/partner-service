@@ -1,25 +1,20 @@
 package com.example.partnerservice.service;
 
-import com.example.partnerservice.domain.Partner;
+import com.example.partnerservice.domain.PartnerEntity;
 import com.example.partnerservice.repository.PartnerRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 
 @SpringBootTest
 @Transactional
-class PartnerServiceImplTest {
+class CategoryServiceImplTest {
 
     @Autowired private PartnerRepository partnerRepository;
 
@@ -28,9 +23,9 @@ class PartnerServiceImplTest {
         // given
         Long partnerId = 1L;
         // when
-        Optional<Partner> findCategory = partnerRepository.findById(partnerId);
+        Optional<PartnerEntity> findCategory = partnerRepository.findById(partnerId);
         // then
-        Assertions.assertThat(findCategory.get().getId()).isEqualTo(partnerId);
+        Assertions.assertThat(findCategory.get()).isEqualTo(partnerId);
     }
 
     @Test
@@ -39,7 +34,7 @@ class PartnerServiceImplTest {
         Long partnerId = 0L;
 
         // when
-        Optional<Partner> findCategory = partnerRepository.findById(partnerId);
+        Optional<PartnerEntity> findCategory = partnerRepository.findById(partnerId);
         // then
         Assertions.assertThatThrownBy(()-> findCategory.get()).isInstanceOf(NoSuchElementException.class);
     }

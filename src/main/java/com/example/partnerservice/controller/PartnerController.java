@@ -2,18 +2,14 @@ package com.example.partnerservice.controller;
 
 
 
-import com.example.partnerservice.domain.Category;
-import com.example.partnerservice.domain.Partner;
-import com.example.partnerservice.dto.PartnerRequestDto;
 import com.example.partnerservice.dto.basic.BasicResponse;
 import com.example.partnerservice.dto.basic.RtnCode;
-import com.example.partnerservice.service.PartnerServiceImpl;
+import com.example.partnerservice.service.CategoryServiceImpl;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -21,28 +17,29 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/partner/")
+@RequestMapping("/partner")
 public class PartnerController {
 
-    private final PartnerServiceImpl partnerService;
-    private final ModelMapper modelMapper;
+    private final CategoryServiceImpl categoryService;
     private Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
+
     /**
-     * 파트너 조회
+     * categoryId 조회
      * @param partnerId
      * @return BasicResponse
      */
-    @GetMapping("/find")
-    public BasicResponse getCategoryId(@RequestParam Long partnerId){
-        BasicResponse basicResponse = new BasicResponse<>();
-        Optional<Partner> partner = partnerService.findCategoryId(partnerId);
-        if(!partner.isPresent()) basicResponse.setCode(RtnCode.FAIL);
+    @ApiOperation(value="CATEGORY ID 조회", notes="정상적일 경우 CATEGORY ID 리턴 / 조회 된 데이터가 없으면 상태코드 404를 리턴 / 조회 중 오류가 발생하면 data에 오류메시지를 리턴")
+    @GetMapping("/category/find")
+    public ResponseEntity<BasicResponse> getCategoryId(@RequestParam Long partnerId){
+        BasicResponse rtn = new BasicResponse<>();
+        Optional<Long> categoryId = categoryService.findCategoryId(partnerId);
+        if(!categoryId.isPresent()) rtn.setCode(RtnCode.FAIL);
         else {
-            basicResponse.setCode(RtnCode.SUCCESS);
-            basicResponse.setData(partner.get().getCategoryId());
+            rtn.setCode(RtnCode.SUCCESS);
+            rtn.setData(categoryId.get());
         }
-        return basicResponse;
+        return ResponseEntity.ok(rtn);
     }
 
 

@@ -1,7 +1,6 @@
 package com.example.partnerservice.service;
 
-import com.example.partnerservice.domain.Partner;
-import com.example.partnerservice.repository.PartnerRepository;
+import com.example.partnerservice.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,19 +12,19 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class PartnerServiceImpl implements PartnerService{
+public class CategoryServiceImpl implements CategoryService {
 
-    private final PartnerRepository partnerRepository;
+    private final CategoryRepository categoryRepository;
     private Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     /**
-     * categoryId 조회
-     * @return Category
+     * PartnerId 조회
+     * @return Partner
      */
     @Override
-    public Optional<Partner> findCategoryId(Long partnerId) {
-        Optional<Partner> findCategory = partnerRepository.findById(partnerId);
-        return findCategory;
+    public Optional<Long> findCategoryId(Long partnerId) {
+        Optional<Long> categoryId = categoryRepository.findByCategoryId(partnerId);
+        return categoryId;
     }
 
 
