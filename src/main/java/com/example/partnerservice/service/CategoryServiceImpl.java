@@ -23,7 +23,7 @@ public class CategoryServiceImpl implements CategoryService {
      */
     @Override
     public Optional<Long> findCategoryId(Long partnerId) {
-        Optional<Long> categoryId = categoryRepository.findByCategoryId(partnerId);
+        Optional<Long> categoryId = Optional.ofNullable(categoryRepository.findByCategoryId(partnerId));
         return categoryId;
     }
 

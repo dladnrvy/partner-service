@@ -14,6 +14,5 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
 
     /** 먼저 적립 된 포인트 조회 _ Lock 설정 */
     @Query("select p.category.categoryId from PartnerEntity p where p.partnerId = :partnerId")
-    Optional<Long> findByCategoryId(Long partnerId);
-
+    Long findByCategoryId(Long partnerId);
 }

@@ -1,41 +1,72 @@
 package com.example.partnerservice.service;
 
-import com.example.partnerservice.domain.PartnerEntity;
-import com.example.partnerservice.repository.PartnerRepository;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.NoSuchElementException;
+import com.example.partnerservice.repository.CategoryRepository;
+import com.example.partnerservice.repository.PartnerRepository;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 
-@SpringBootTest
-@Transactional
+
+@ExtendWith(MockitoExtension.class)
 class CategoryServiceImplTest {
 
-    @Autowired private PartnerRepository partnerRepository;
+    @InjectMocks
+    private CategoryServiceImpl categoryService;
 
-    @Test
-    void 카테고리아이디_조회_성공() {
-        // given
-        Long partnerId = 1L;
-        // when
-        Optional<PartnerEntity> findCategory = partnerRepository.findById(partnerId);
-        // then
-        Assertions.assertThat(findCategory.get()).isEqualTo(partnerId);
+    @Mock
+    private CategoryRepository categoryRepository;
+    @Mock
+    private PartnerRepository partnerRepository;
+
+    @Nested
+    @DisplayName("성공케이스")
+    class SuccessCase {
+        @Test
+        void 카테고리아이디_조회() {
+            // given
+            Long fakeCategoryId = 1l;
+            Long fakePartnerId = 2l;
+
+            // mocking
+            given(categoryRepository.findByCategoryId(any())).willReturn(fakeCategoryId);
+
+            // when
+            Optional<Long> categoryId = categoryService.findCategoryId(fakePartnerId);
+
+            // then
+            assertThat(categoryId).isNotEmpty();
+            assertEquals(categoryId.get(), fakeCategoryId);
+        }
+    }
+    @Nested
+    @DisplayName("실패케이스")
+    class FailCase{
+        @Test
+        void 카테고리아이디_조회() {
+            // given
+            Long fakePartnerId = 2l;
+
+            // mocking
+            given(categoryRepository.findByCategoryId(any())).willReturn(null);
+
+            // when
+            Optional<Long> categoryId = categoryService.findCategoryId(fakePartnerId);
+
+            // then
+            assertThat(categoryId).isEmpty();
+        }
     }
 
-    @Test
-    void 카테고리아이디_조회_실패() {
-        // given
-        Long partnerId = 0L;
-
-        // when
-        Optional<PartnerEntity> findCategory = partnerRepository.findById(partnerId);
-        // then
-        Assertions.assertThatThrownBy(()-> findCategory.get()).isInstanceOf(NoSuchElementException.class);
-    }
 }

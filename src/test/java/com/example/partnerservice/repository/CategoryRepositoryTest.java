@@ -92,7 +92,7 @@ class CategoryRepositoryTest {
             partnerRepository.save(partnerEntity);
 
             // when
-            Optional<Long> categoryId = categoryRepository.findByCategoryId(partnerEntity.getPartnerId());
+            Optional<Long> categoryId = Optional.ofNullable(categoryRepository.findByCategoryId(partnerEntity.getPartnerId()));
 
             // then
             assertThat(categoryId).isNotEmpty();
@@ -187,7 +187,7 @@ class CategoryRepositoryTest {
             partnerRepository.save(partnerEntity);
 
             // when
-            Optional<Long> categoryId = categoryRepository.findByCategoryId(123l);
+            Optional<Long> categoryId = Optional.ofNullable(categoryRepository.findByCategoryId(123l));
 
             // then
             assertThat(categoryId).isEmpty();
